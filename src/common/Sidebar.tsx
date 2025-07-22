@@ -1,59 +1,136 @@
 import { NavLink } from "react-router";
 import Navbarcomponent from "src/components/NavbarComponent";
+import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
+import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 
-const test = () => {
-    return(
-        <div className = "flex relative bg-color justify-center">
-        <NavLink to ="/" style = {({isActive, isPending, isTransitioning}) => 
-            ({color: isActive?"red": "blue"})}> 
-            Home    
-        </NavLink>
+const navigation = [
+    { name: 'Home', href: '/', current: true },
+    { name: 'Dashboard', href: 'dashboard', current: false },
+    { name: "PongGame", href: 'ponggame', current: false },
+    { name: "About", href: 'about', current: false },
+    { name: 'Login', href: 'login', current: false },
 
-        <NavLink to ="/about" style = {({isActive, isPending, isTransitioning}) => 
-            ({color: isActive?"red": "blue"})}> 
-            About   
-        </NavLink>    
-        
-        <NavLink to ="/dashboard" style = {({isActive, isPending, isTransitioning}) => 
-            ({color: isActive?"red": "blue"})}> 
-            Dashboard       
-        </NavLink>    
-        
-        <NavLink to ="/ponggame" style = {({isActive, isPending, isTransitioning}) => 
-            ({color: isActive?"red": "blue"})}> 
-            PongGame     
-        </NavLink>
+]
 
-        <NavLink to ="/post/6" style = {({isActive, isPending, isTransitioning}) => 
-            ({color: isActive?"red": "blue"})}> 
-            Post6    
-        </NavLink>  
-        </div>  
-    )
+    function classNames(...classes: any[]) {
+    return classes.filter(Boolean).join(' ')
 }
 
-const Sidebar = () => {
-    return(
-    <>
-    <div className="">
+export default function Sidebar() {
+  return (
+    <Disclosure as="nav" className="bg-violet-400">
+      <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+        <div className="relative flex h-16 items-center justify-between">
+          <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
+            {/* Mobile menu button*/}
+            <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:ring-2 focus:ring-white focus:outline-hidden focus:ring-inset">
+              <span className="absolute -inset-0.5" />
+              <span className="sr-only">Open main menu</span>
+              <Bars3Icon aria-hidden="true" className="block size-6 group-data-open:hidden" />
+              <XMarkIcon aria-hidden="true" className="hidden size-6 group-data-open:block" />
+            </DisclosureButton>
+          </div>
+          <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+            <div className="flex shrink-0 items-center">
+              <img
+                alt="Your Company"
+                src="/public/logos/main-logo.png"
+                className="h-8 w-auto"
+              />
+            </div>
+            <div className="hidden sm:ml-6 sm:block">
+              <div className="flex space-x-4">
+                {navigation.map((item) => (
+                  <a
+                    key={item.name}
+                    href={item.href}
+                    aria-current={item.current ? 'page' : undefined}
+                    className={classNames(
+                      item.current ? 'bg-blue-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                      'rounded-md px-3 py-2 text-sm font-medium',
+                    )}
+                  >
+                    {item.name}
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
+          <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+            <button
+              type="button"
+              className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-800 focus:outline-hidden"
+            >
+              <span className="absolute -inset-1.5" />
+              <span className="sr-only">View notifications</span>
+              <BellIcon aria-hidden="true" className="size-6" />
+            </button>
 
-        <div className="relative flex flex-col flex-wrap md:flex-row bg-blend-color bg-purple-300">    
-            <a className = "flex items-center ml-4 md:ml-14" href="/"> 
-                <img src="/logos/navbarlogo.png" className="w-40"></img>
-            </a>
-                <Navbarcomponent navLinkString="/" navString="Home"></Navbarcomponent>
-                <Navbarcomponent navLinkString="/about" navString="About"></Navbarcomponent>
-                <Navbarcomponent navLinkString="/dashboard" navString="Dashboard"></Navbarcomponent>
-                <Navbarcomponent navLinkString="/ponggame" navString="PongGame"></Navbarcomponent>
-                <Navbarcomponent navLinkString="/login" navString="Login"></Navbarcomponent>
+            {/* Profile dropdown */}
+            <Menu as="div" className="relative ml-3">
+              <div>
+                <MenuButton className="relative flex rounded-full bg-gray-800 text-sm focus:outline-hidden focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-gray-800">
+                  <span className="absolute -inset-1.5" />
+                  <span className="sr-only">Open user menu</span>
+                  <img
+                    alt=""
+                    src="/public/logos/main-logo.png"
+                    className="size-8 rounded-full"
+                  />
+                </MenuButton>
+              </div>
+              <MenuItems
+                transition
+                className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black/5 transition focus:outline-hidden data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
+              >
+                <MenuItem>
+                  <a
+                    href="#"
+                    className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
+                  >
+                    Your Profile
+                  </a>
+                </MenuItem>
+                <MenuItem>
+                  <a
+                    href="#"
+                    className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
+                  >
+                    Settings
+                  </a>
+                </MenuItem>
+                <MenuItem>
+                  <a
+                    href="#"
+                    className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
+                  >
+                    Sign out
+                  </a>
+                </MenuItem>
+              </MenuItems>
+            </Menu>
+          </div>
         </div>
-    </div>
-    </>
-    );
-};
+      </div>
 
-
-
-
-
-export default Sidebar;
+      <DisclosurePanel className="sm:hidden">
+        <div className="space-y-1 px-2 pt-2 pb-3">
+          {navigation.map((item) => (
+            <DisclosureButton
+              key={item.name}
+              as="a"
+              href={item.href}
+              aria-current={item.current ? 'page' : undefined}
+              className={classNames(
+                item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                'block rounded-md px-3 py-2 text-base font-medium',
+              )}
+            >
+              {item.name}
+            </DisclosureButton>
+          ))}
+        </div>
+      </DisclosurePanel>
+    </Disclosure>
+  )
+}

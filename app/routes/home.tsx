@@ -2,6 +2,8 @@ import type { Route } from "./+types/home";
 import { Welcome } from "../welcome/welcome";
 import GameBoxComponent from "src/components/GameBoxComponent";
 import { Link } from "react-router";
+import Sidebar from "src/common/Sidebar";
+import Hero from "src/components/hero";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -18,7 +20,8 @@ export default function Home( ) {
   return (
     <>
     <div className="scroll-smooth">
-    <img src="/logos/playclawmachines.png" className="w-fit h-fit"></img>
+    <img src="/logos/playclawmachines.png" className="w-fit h-fit md:w-3/4 mx-auto"></img>
+    <Hero/>
     <h1 className="text-center text-gray-800 text-xl font-extrabold m-5 animate-bounce">  Featured</h1> 
       <GameBoxComponent imgsrc="/logos/prizeTime.png" gameName = "cuddlykittens"/>
       <GameBoxComponent imgsrc="/logos/prizeTime.png" gameName = "cuddlykittens"/>
