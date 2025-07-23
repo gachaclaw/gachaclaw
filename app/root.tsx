@@ -11,6 +11,7 @@ import {
 import type { Route } from "./+types/root";
 import "./app.css";
 import Sidebar from "src/common/Sidebar";
+import NavBar from "src/common/NavBar";
 import PongGameWebGLBuild from "src/webgl";
 import { CurrencyProvider } from "src/context/CurrencyContext";
 
@@ -48,15 +49,20 @@ export function Layout({ children }: { children: React.ReactNode }) {
 export default function App() {
   return (
     <CurrencyProvider>
-      <main className="my-5">
-        <div className="App"> 
-          <Sidebar />
-        </div>
-        <Outlet />
-      </main>
+      <>
+        <main className="">
+          <div className="App"> 
+            <div> 
+              <NavBar />
+            </div>
+            <Outlet />
+          </div> 
+        </main>
+      </>
     </CurrencyProvider>
   );
 }
+
 
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
