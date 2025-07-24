@@ -1,7 +1,9 @@
 import { NavLink } from "react-router";
 import Navbarcomponent from "src/components/NavbarComponent";
+import { useCurrency } from "src/context/CurrencyContext";
 
 const test = () => {
+    const { currency } = useCurrency(); 
     return(
         <div className = "flex relative bg-color justify-center">
         <NavLink to ="/" style = {({isActive, isPending, isTransitioning}) => 
@@ -21,7 +23,7 @@ const test = () => {
         
         <NavLink to ="/ponggame" style = {({isActive, isPending, isTransitioning}) => 
             ({color: isActive?"red": "blue"})}> 
-            PongGame     
+            PongGame (${currency})    
         </NavLink>
 
         <NavLink to ="/post/6" style = {({isActive, isPending, isTransitioning}) => 
@@ -33,23 +35,25 @@ const test = () => {
 }
 
 const Sidebar = () => {
-    return(
-    <>
-    <div className="">
+  const { currency } = useCurrency(); 
 
-        <div className="relative flex flex-col flex-wrap md:flex-row bg-blend-color bg-purple-300">    
-            <a className = "flex items-center ml-4 md:ml-14" href="/"> 
-                <img src="/logos/navbarlogo.png" className="w-40"></img>
-            </a>
-                <Navbarcomponent navLinkString="/" navString="Home"></Navbarcomponent>
-                <Navbarcomponent navLinkString="/about" navString="About"></Navbarcomponent>
-                <Navbarcomponent navLinkString="/dashboard" navString="Dashboard"></Navbarcomponent>
-                <Navbarcomponent navLinkString="/ponggame" navString="PongGame"></Navbarcomponent>
-                <Navbarcomponent navLinkString="/login" navString="Login"></Navbarcomponent>
-        </div>
+  return (
+    <div className="">
+      <div className="relative flex flex-col flex-wrap md:flex-row bg-blend-color bg-purple-300">
+        <a className="flex items-center ml-4 md:ml-14" href="/">
+          <img src="/logos/navbarlogo.png" className="w-40" />
+        </a>
+        <Navbarcomponent navLinkString="/" navString="Home" />
+        <Navbarcomponent navLinkString="/about" navString="About" />
+        <Navbarcomponent navLinkString="/dashboard" navString="Dashboard" />
+        <Navbarcomponent
+          navLinkString="/ponggame"
+          navString={`PongGame ($${currency})`} 
+        />
+        <Navbarcomponent navLinkString="/login" navString="Login" />
+      </div>
     </div>
-    </>
-    );
+  );
 };
 
 

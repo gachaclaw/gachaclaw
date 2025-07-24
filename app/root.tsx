@@ -13,6 +13,7 @@ import "./app.css";
 import Sidebar from "src/common/Sidebar";
 import NavBar from "src/common/NavBar";
 import PongGameWebGLBuild from "src/webgl";
+import { CurrencyProvider } from "src/context/CurrencyContext";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -47,16 +48,18 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export default function App() {
   return (
-    <>
-    <main className="">
-      <div className="App"> 
-        <div> 
-          <NavBar />
-        </div>
-      </div>
-    <Outlet />
-    </main>
-  </>
+    <CurrencyProvider>
+      <>
+        <main className="">
+          <div className="App"> 
+            <div> 
+              <NavBar />
+            </div>
+            <Outlet />
+          </div> 
+        </main>
+      </>
+    </CurrencyProvider>
   );
 }
 

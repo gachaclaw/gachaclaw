@@ -1,14 +1,17 @@
-import PongGameWebGLBuild from "src/webgl"
+import PongGameWebGLBuild from "src/webgl";
+import { useCurrency } from "src/context/CurrencyContext";
 
-export default function PongGame(){
-    return (
-        <>
-        <h1>
-            PongGame
-        </h1>
-        <div className = "w-100 h-100 flex relative justify-items-center">
-            <PongGameWebGLBuild/>
-        </div>
-        </>
-    )
+export default function PongGame() {
+  const { currency } = useCurrency();  
+
+  return (
+    <>
+      <h1>
+        PongGame (${currency})  
+      </h1>
+      <div className="w-full h-full flex items-center justify-center">
+        <PongGameWebGLBuild />
+      </div>
+    </>
+  );
 }
