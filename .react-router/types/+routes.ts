@@ -27,6 +27,9 @@ type Pages = {
   "/login": {
     params: {};
   };
+  "/games": {
+    params: {};
+  };
   "/dashboard": {
     params: {};
   };
@@ -41,7 +44,7 @@ type Pages = {
 type RouteFiles = {
   "root.tsx": {
     id: "root";
-    page: "/" | "/about" | "/post/:postId" | "/ponggame" | "/login" | "/dashboard" | "/dashboard/finances" | "/dashboard/personal-info";
+    page: "/" | "/about" | "/post/:postId" | "/ponggame" | "/login" | "/games" | "/dashboard" | "/dashboard/finances" | "/dashboard/personal-info";
   };
   "routes/home.tsx": {
     id: "routes/home";
@@ -62,6 +65,10 @@ type RouteFiles = {
   "routes/login.tsx": {
     id: "routes/login";
     page: "/login";
+  };
+  "routes/games.tsx": {
+    id: "routes/games";
+    page: "/games";
   };
   "routes/dashboard.tsx": {
     id: "routes/dashboard";
