@@ -41,7 +41,7 @@ export default function SignUpForm(){
       if(response){
         console.log(response);
         //setRefresh(prevState => !prevState);
-        window.alert(`User has been created with username: ${username}, email: ${email}`);
+        window.alert(`User has been created with username: ${username}, email: ${email}. Please take out this crappy windows alert in the future and redirect to home page IF signed in.`);
       }
     } catch (error) {
       console.error("Failed to post data:", error);
