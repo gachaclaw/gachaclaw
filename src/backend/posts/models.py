@@ -1,3 +1,4 @@
+import uuid
 from django.db import models
 
 # Create your models here.
@@ -9,3 +10,8 @@ class Post(models.Model):
     
     def __str__(self):
         return f"Post: {self.username}"
+    
+    def save(self, *args, **kwargs):
+        if not self.username:
+            self.username = str(uuid.uuid4()).replace("-", "").upper()[:12]
+        super().save(*args, **kwargs)

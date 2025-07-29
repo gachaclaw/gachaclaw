@@ -1,3 +1,6 @@
 .vercel
 node_modules/
 .env
+__pycache__/
+*.py[cod]
+src/backend/posts/__pycache__/models.cpython-310.pyc
