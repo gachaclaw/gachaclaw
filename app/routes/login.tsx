@@ -73,9 +73,9 @@ export default function Login(this: any){
                         </div>
                             <div className="mt-8 flex justify-center items-center">
                                 <p className="font-medium-text-base"> Don't have an account?</p>
-                                <button className="text-violet-500 text-base font-medium ml-2"> 
+                                <button className="text-violet-500 text-base font-medium ml-2 transition duration-100 ease-in-out hover:-translate-y-1 hover:scale-110" > 
                                     
-                                <a href = "signupform"> Sign up</a>
+                                <a  href = "signupform"> Sign up</a>
                                 </button>
                             </div>
                             </div>
