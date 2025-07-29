@@ -1,7 +1,6 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { Form } from "react-router";
-//import sendDataToDjango from "src/backend/crud/sendDataToDjango"
 
 export default function SignUpForm(){
 
@@ -29,54 +28,32 @@ export default function SignUpForm(){
     }
   }
 
-  const postData = async() => {
-    const username = 'test xxxxxx';
-    const password = "test pass";
-    const email = "test email";
-    const money = 0.00;
-
-    const body = {username, password, email, money};
-
-    try{
-      const response = await axios.post(endpoint, body);
-      console.log(response);
-      return response.data;
-    }
-    catch(error){
-      console.log(error)
-    }
-  }
-
   const handleSendData = async() => {
-    /*
-    const newData = await postData();
-    if(newData){
-      setRefresh(prevState => !prevState);
-    }
-    */
-    // ....
     if (password !== confirmPassword) {
       setError("Passwords do not match.");
       window.alert(`${error}`)
       return;
     }
-      const body = { username, email, password, money: 0 };
+    const body = { username, email, password, money: 0 };
 
-      try {
-    const response = await axios.post(endpoint, body);
-    console.log(response);
-    setRefresh(prev => !prev);
-  } catch (error) {
-    console.error("Failed to post data:", error);
-  }
+    try {
+      const response = await axios.post(endpoint, body);
+      if(response){
+        console.log(response);
+        //setRefresh(prevState => !prevState);
+        window.alert(`User has been created with username: ${username}, email: ${email}`);
+      }
+    } catch (error) {
+      console.error("Failed to post data:", error);
+    }
   }
 
   useEffect(() =>{
     fetchData();
   }, [refresh]);
-  // refresh in dependency array
+  // refresh is in dependency array
 
-
+  /* USE IN THE FUTURE TO FETCH DATA!
   const [data, setData] = useState([])
   useEffect(() => {
       console.log(import.meta.env.VITE_API_URL);
@@ -97,6 +74,12 @@ export default function SignUpForm(){
       fetchData();
   }, []);
 
+//       <ul>
+//        {postsData?.map(el => <li key={el?.id} {el?.username} test</li> TODO: ADD AN ID HERE TO MAKE UNIQUE KEYS )}
+//     </ul>
+  
+  */
+
   useEffect(() => {
   if (confirmPassword && password !== confirmPassword) {
     setError("Passwords do not match.");
@@ -105,21 +88,12 @@ export default function SignUpForm(){
   }
 }, [password, confirmPassword]);
 
-  const handleClick = () => {
-    const myObject = {
-      username: "tailer",
-      password: "1234",
-      email: "asdfasdf@gmail.com",
-      money: 50.0,
-    };
-    //sendDataToDjango(myObject);
-  };
   return (
           <>
             <div className = "flex w-full h-screen">
                 <div className = "w-full flex items-center justify-center lg:w-1/2">
                     <div className ="bg-white px-10 py-20 rounded-3xl border-3 border-gray-300">
-                        <form id = "registrationForm" action="#" method="POST" className="space-y-6">
+                        <form id = "registrationForm" onSubmit={handleSendData} className="space-y-6">
                         <h1 className ="text-5xl font-semibold">Create a new account!</h1>
                         <p className ="font-medium text-lg text-gray-700 mt-4 text-center"> Or<a href="login" className="text-violet-500 text-base font-medium ml-2 transition duration-100 ease-in-out hover:-translate-y-1 hover:scale-110"> login to your account </a></p>
                         <div className = "mt-8">
@@ -178,7 +152,7 @@ export default function SignUpForm(){
                             className="block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                             />
                         </div>
-                        <div className = "mt-8 flex flex-col gap-y-4 ">
+                        <div className = "mt-8 flex flex-col gap-y-4 " onClick={handleSendData}>
                             <button
                                 type="submit" 
                                 className = "active:scale-[.98] active:duration-75 hover:scale-[1.01] ease-in-out transition-all py-2.5 rounded-xl bg-violet-500 text-white text-lg font-bold"                            
@@ -207,17 +181,6 @@ export default function SignUpForm(){
                         <div className = "w-full h-1/2 absolute bottom-0 bg-white/10 backdrop-blur-lg"/>
                     </div>
                 </div>
-      <ul>
-        {postsData?.map(el => <li /*key={el?.id}*/> {el?.username} test</li> /* TODO: ADD AN ID HERE TO MAKE UNIQUE KEYS */)}
-      </ul>
-      <button onClick={handleSendData}> Create data </button>
-      <div className="text-2xl">Click to send data:</div>
-      <button
-        onClick={handleClick}
-        className="bg-purple-600 text-white p-2 rounded mt-2"
-      >
-        Send Data
-      </button>
       </>
   );
 }
