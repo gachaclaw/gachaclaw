@@ -1,5 +1,6 @@
 import { type RouteConfig, index, route } from "@react-router/dev/routes";
 
+
 export default [
     index("routes/home.tsx"), 
     route("about","routes/about.tsx"),
@@ -7,6 +8,7 @@ export default [
     route("ponggame", "routes/pong-game.tsx"),
     route("login", "routes/login.tsx"),
     route("signupform", "routes/signupform.tsx"),
+    route("games", "routes/games.tsx"),
 
     // nested routes
     route("dashboard", "routes/dashboard.tsx", /*child route array*/[

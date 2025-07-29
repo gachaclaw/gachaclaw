@@ -5,6 +5,7 @@ export default function Dashboard(){
     <div className="text-amber-950"> 
         {" "}
         Hey, welcome to the dashboard page. <Outlet />
+        
     </div>
     );
 }

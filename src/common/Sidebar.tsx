@@ -46,6 +46,7 @@ const Sidebar = () => {
                 <Navbarcomponent navLinkString="/dashboard" navString="Dashboard"></Navbarcomponent>
                 <Navbarcomponent navLinkString="/ponggame" navString="PongGame"></Navbarcomponent>
                 <Navbarcomponent navLinkString="/login" navString="Login"></Navbarcomponent>
+                <Navbarcomponent navLinkString="/games" navString="Games"></Navbarcomponent>
         </div>
     </div>
     </>
