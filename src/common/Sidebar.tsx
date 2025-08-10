@@ -1,6 +1,7 @@
 import { NavLink } from "react-router";
 import Navbarcomponent from "src/components/NavbarComponent";
 
+
 const test = () => {
     return(
         <div className = "flex relative bg-color justify-center">
@@ -32,7 +33,7 @@ const test = () => {
     )
 }
 
-const Sidebar = () => {
+const Sidebar = (props: any) => {
     return(
     <>
     <div className="">

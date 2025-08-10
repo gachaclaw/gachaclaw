@@ -12,7 +12,7 @@ export default function SignUpForm(){
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
 
-  const endpoint = `${import.meta.env.VITE_API_URL}/posts/`;
+  const endpoint = `${import.meta.env.VITE_API_URL}/api/posts/`;
 
   const fetchData = async() => {
     console.log("Fetching from django server");

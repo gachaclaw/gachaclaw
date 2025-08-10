@@ -1,8 +1,12 @@
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { useNavigate } from 'react-router'
+import { toast } from 'react-toastify'
+import { Avatar, Dropdown, Navbar , Card, DropdownItem} from "flowbite-react";
+import React, { createContext, useContext } from 'react';
 
 const navigation = [
-{ name: 'Home', href: '/', current: true },
+  { name: 'Home', href: '/', current: true },
   { name: 'Dashboard', href: 'dashboard', current: false },
   { name: 'About', href: 'about', current: false },
   { name: 'Pong Game', href: 'ponggame', current: false },
@@ -14,7 +18,17 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function NavBar() {
+const NavBar = (props:any) => {
+  let navigate = useNavigate();
+  const { isLoggedIn, setIsLoggedIn, name, setName, email, setEmail } = props;
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    setName(null);
+    setEmail(null);
+    navigate("/");
+    toast.success("You are successfully logged out!");
+  };
+
   return (
     <Disclosure as="nav" className="bg-violet-500">
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -63,8 +77,9 @@ export default function NavBar() {
               <span className="sr-only">View notifications</span>
               <BellIcon aria-hidden="true" className="size-6" />
             </button>
-
-            {/* Profile dropdown */}
+        <div className="flex md:order-2">
+      {/* Profile dropdown if user is logged in*/}
+      {isLoggedIn && (
             <Menu as="div" className="relative ml-3">
               <div>
                 <MenuButton className="relative flex rounded-full bg-gray-800 text-sm focus:outline-hidden focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-gray-800">
@@ -107,6 +122,9 @@ export default function NavBar() {
                 </MenuItem>
               </MenuItems>
             </Menu>
+      )}
+
+        </div>
           </div>
         </div>
       </div>
@@ -132,3 +150,5 @@ export default function NavBar() {
     </Disclosure>
   )
 }
+
+export default NavBar;
