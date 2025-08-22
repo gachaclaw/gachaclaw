@@ -1,8 +1,9 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { Form } from "react-router";
+import { Form, useNavigate } from "react-router";
 
 export default function SignUpForm(){
+  let navigate = useNavigate();
 
   const [postsData, setPostsData] = useState([]);
   const [refresh, setRefresh] = useState(false);
@@ -12,7 +13,7 @@ export default function SignUpForm(){
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
 
-  const endpoint = `${import.meta.env.VITE_API_URL}/posts/`;
+  const endpoint = `${import.meta.env.VITE_API_URL}/api/posts/`;
 
   const fetchData = async() => {
     console.log("Fetching from django server");
@@ -28,20 +29,33 @@ export default function SignUpForm(){
     }
   }
 
-  const handleSendData = async() => {
+  const handleSendData = async(ev: any) => {
+    ev.preventDefault(); // ✅ prevent page reload
+
+    console.log('handle send data called');
     if (password !== confirmPassword) {
       setError("Passwords do not match.");
       window.alert(`${error}`)
       return;
     }
-    const body = { username, email, password, money: 0 };
-
+    const body = {
+      username,
+      email,
+      password,
+      money: 0,
+      phone: "",
+      country: "",
+    };
     try {
       const response = await axios.post(endpoint, body);
       if(response){
         console.log(response);
         //setRefresh(prevState => !prevState);
         window.alert(`User has been created with username: ${username}, email: ${email}. Please take out this crappy windows alert in the future and redirect to home page IF signed in.`);
+        navigate('/login');      
+        // to do in the future:
+        // setIsLoggedIn(true);
+        // navigate(profile? home page?)
       }
     } catch (error) {
       console.error("Failed to post data:", error);
@@ -152,7 +166,7 @@ export default function SignUpForm(){
                             className="block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                             />
                         </div>
-                        <div className = "mt-8 flex flex-col gap-y-4 " onClick={handleSendData}>
+                        <div className = "mt-8 flex flex-col gap-y-4 ">
                             <button
                                 type="submit" 
                                 className = "active:scale-[.98] active:duration-75 hover:scale-[1.01] ease-in-out transition-all py-2.5 rounded-xl bg-violet-500 text-white text-lg font-bold"                            

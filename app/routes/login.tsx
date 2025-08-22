@@ -1,22 +1,93 @@
 import React, { useEffect, useState } from 'react';
-import { Form } from "react-router";
+import { Form, redirect, useNavigate, type MetaFunction } from "react-router";
 import axios from "axios";
+import type { Route } from './+types/login';
+import { toast } from 'react-toastify';
 //import LoginDetails from "src/backend/access_database";
+import { useAuth } from "src/context/UserContext";
 
-interface user{
+interface userType{
     userName: string;
     password: string;
     email: string;
     money: 0.00;
 };
-     
-export default function Login(this: any){
+
+export const meta: MetaFunction = () => {
+    return [
+        { title: "GachaClaw React Router App"},
+        { name: "description", content: "GachaClaw metafunction."}
+    ]
+}
+
+// checks if the user is already logged in 
+export async function loader({ request }: Route.LoaderArgs){
+    /*
+    const userId = await getUserId(request);
+    if (userId){
+        return redirect("/");
+    }
+    */
+}
+
+export async function action({ request }: Route.ActionArgs){
+    try{
+        const formData = await request.formData();
+        const email = formData.get("email")?.toString();
+        const password = formData.get("password")?.toString();
+
+        // checks user credentials
+    }catch(e){
+        console.log(`error: ${e}`)
+    }
+}
+
+const URL = `${import.meta.env.VITE_API_URL}/api/auth/login/`;
+
+const Login = (props: any) => {
+    let navigate = useNavigate();
+    //const { isLoggedIn, setIsLoggedIn, setName, setEmail } = props;
+    const { isLoggedIn, setIsLoggedIn, setName, setEmail } = useAuth();
+    /*
+    useEffect(() => {
+        if (isLoggedIn) navigate("profile");
+    });
+    */
+
+    const handleLogin = async (ev: any) => {
+        console.log("submit button clicked");
+        console.log(URL);
+        console.log("Raw env:", import.meta.env.VITE_API_URL);
+
+        ev.preventDefault(); // refreshes page
+        const email = ev.target.email.value;
+        const password = ev.target.password.value;
+        const formData = { email: email, password: password };
+
+        console.log(`${email} \n ${password}`);
+        const res = await axios.post(URL, formData);
+        const data = res.data;
+        console.log("TESTING");
+        console.log(data);
+        if (data.success === true) {
+            toast.success(data.message);
+            setIsLoggedIn(true);
+            setEmail(email);
+            //navigate("/profile");
+            console.log("User is successfully logged in");
+        } else {
+            console.log("User is not logged in");
+            toast.error("Unable to get data" + data.message);
+        }
+
+  };
+
     return (
         <>
             <div className = "flex w-full h-screen">
                 <div className = "w-full flex items-center justify-center lg:w-1/2">
                     <div className ="bg-white px-10 py-20 rounded-3xl border-3 border-gray-300">
-                        <form action="#" method="POST" className="space-y-6">
+                        <form onSubmit={handleLogin}  className="space-y-6">
                         <h1 className ="text-5xl font-semibold"> Welcome back!</h1>
                         <p className ="font-medium text-lg text-gray-700 mt-4"> Sign in to your account</p>
                         <div className = "mt-8">
@@ -91,3 +162,5 @@ export default function Login(this: any){
         </>
     );
 }
+
+export default Login;

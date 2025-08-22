@@ -7,13 +7,12 @@ import {
   Scripts,
   ScrollRestoration,
 } from "react-router";
-
+import { useState } from "react";
 import type { Route } from "./+types/root";
 import "./app.css";
-import Sidebar from "src/common/Sidebar";
 import NavBar from "src/common/NavBar";
-import PongGameWebGLBuild from "src/webgl";
 import { CurrencyProvider } from "src/context/CurrencyContext";
+import { UserProvider } from "src/context/UserContext";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -47,19 +46,32 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+
   return (
+    <UserProvider>
     <CurrencyProvider>
       <>
         <main className="">
           <div className="App"> 
             <div> 
-              <NavBar />
+              <NavBar 
+                isLoggedIn={isLoggedIn}
+                setIsLoggedIn={setIsLoggedIn}
+                name={name}
+                setName={setName}
+                email={email}
+                setEmail={setEmail}
+              />
             </div>
             <Outlet />
           </div> 
         </main>
       </>
     </CurrencyProvider>
+    </UserProvider>
   );
 }
 
