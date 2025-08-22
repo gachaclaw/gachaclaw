@@ -12,6 +12,7 @@ import type { Route } from "./+types/root";
 import "./app.css";
 import NavBar from "src/common/NavBar";
 import { CurrencyProvider } from "src/context/CurrencyContext";
+import { UserProvider } from "src/context/UserContext";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -50,20 +51,19 @@ export default function App() {
   const [email, setEmail] = useState("");
 
   return (
+    <UserProvider>
     <CurrencyProvider>
       <>
         <main className="">
           <div className="App"> 
             <div> 
               <NavBar 
-                /* TODO: add a createContext for when user is logged in 
                 isLoggedIn={isLoggedIn}
                 setIsLoggedIn={setIsLoggedIn}
                 name={name}
                 setName={setName}
                 email={email}
                 setEmail={setEmail}
-                */
               />
             </div>
             <Outlet />
@@ -71,6 +71,7 @@ export default function App() {
         </main>
       </>
     </CurrencyProvider>
+    </UserProvider>
   );
 }
 

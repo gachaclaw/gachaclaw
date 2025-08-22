@@ -8,8 +8,8 @@ class Post(models.Model):
     password = models.CharField(max_length=30)
     email = models.CharField(max_length=30)
     money = models.DecimalField(decimal_places=2, max_digits=20)
-    phone = models.CharField(max_length=10, null=True)
-    country = models.CharField(max_length=63, default="america")
+    phone = models.CharField(max_length=20, blank=True, null=True)
+    country = models.CharField(max_length=100, blank=True, null=True)
     
     def __str__(self) -> str:
         return f"Post: {self.username}"

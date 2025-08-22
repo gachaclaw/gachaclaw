@@ -4,8 +4,9 @@ import axios from "axios";
 import type { Route } from './+types/login';
 import { toast } from 'react-toastify';
 //import LoginDetails from "src/backend/access_database";
+import { useAuth } from "src/context/UserContext";
 
-interface user{
+interface userType{
     userName: string;
     password: string;
     email: string;
@@ -43,20 +44,22 @@ export async function action({ request }: Route.ActionArgs){
 
 const URL = `${import.meta.env.VITE_API_URL}/api/auth/login/`;
 
-const Login = (props: any) =>{
+const Login = (props: any) => {
     let navigate = useNavigate();
-    const { isLoggedIn, setIsLoggedIn, setName, setEmail } = props;
-
+    //const { isLoggedIn, setIsLoggedIn, setName, setEmail } = props;
+    const { isLoggedIn, setIsLoggedIn, setName, setEmail } = useAuth();
+    /*
     useEffect(() => {
         if (isLoggedIn) navigate("profile");
     });
+    */
 
     const handleLogin = async (ev: any) => {
         console.log("submit button clicked");
         console.log(URL);
         console.log("Raw env:", import.meta.env.VITE_API_URL);
 
-        ev.preventDefault();
+        ev.preventDefault(); // refreshes page
         const email = ev.target.email.value;
         const password = ev.target.password.value;
         const formData = { email: email, password: password };
@@ -70,7 +73,7 @@ const Login = (props: any) =>{
             toast.success(data.message);
             setIsLoggedIn(true);
             setEmail(email);
-            navigate("/profile");
+            //navigate("/profile");
             console.log("User is successfully logged in");
         } else {
             console.log("User is not logged in");

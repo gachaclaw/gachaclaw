@@ -1,9 +1,10 @@
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { useNavigate } from 'react-router'
+import { BrowserRouter, Link, NavLink, Route, useNavigate } from 'react-router'
 import { toast } from 'react-toastify'
 import { Avatar, Dropdown, Navbar , Card, DropdownItem} from "flowbite-react";
 import React, { createContext, useContext } from 'react';
+import { useAuth } from "src/context/UserContext";
 
 const navigation = [
   { name: 'Home', href: '/', current: true },
@@ -20,7 +21,9 @@ function classNames(...classes: string[]) {
 
 const NavBar = (props:any) => {
   let navigate = useNavigate();
-  const { isLoggedIn, setIsLoggedIn, name, setName, email, setEmail } = props;
+  //const { isLoggedIn, setIsLoggedIn, name, setName, email, setEmail } = props;
+  const { isLoggedIn, name , setIsLoggedIn, setName, email, setEmail} = useAuth();
+
   const handleLogout = () => {
     setIsLoggedIn(false);
     setName(null);
@@ -51,6 +54,38 @@ const NavBar = (props:any) => {
               />
             </div>
             <div className="hidden sm:ml-6 sm:block">
+              <div className ="flex space-x-4">
+                <NavLink to={`/`} 
+                 className ="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 font-medium">
+                      Home
+                </NavLink>
+                  <NavLink to={`dashboard`} 
+                 className ="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 font-medium"> 
+                      Dashboard
+                </NavLink>
+                <NavLink to={`about`} 
+                 className ="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 font-medium"> 
+                      About
+                </NavLink>
+                  <NavLink to={`ponggame`} 
+                 className ="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 font-medium"> 
+                      Pong Game
+                </NavLink>
+                <NavLink to={`games`} 
+                 className ="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 font-medium"> 
+                      Games
+                </NavLink>
+                {!isLoggedIn && (
+                <NavLink to={`login`} 
+                 className ="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 font-medium"> 
+                      Login
+                </NavLink>
+                )}  
+                </div>
+              </div>
+              { // old way of navigating... may be helpful for games 
+              /* 
+            <div className="hidden sm:ml-6 sm:block">
               <div className="flex space-x-4">
                 {navigation.map((item) => (
                   <a
@@ -67,8 +102,14 @@ const NavBar = (props:any) => {
                 ))}
               </div>
             </div>
+            */
+            }
           </div>
           <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+      {/* Profile dropdown if user is logged in*/}
+        <div className="flex md:order-2">
+      {isLoggedIn && (
+        <>
             <button
               type="button"
               className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden"
@@ -77,9 +118,6 @@ const NavBar = (props:any) => {
               <span className="sr-only">View notifications</span>
               <BellIcon aria-hidden="true" className="size-6" />
             </button>
-        <div className="flex md:order-2">
-      {/* Profile dropdown if user is logged in*/}
-      {isLoggedIn && (
             <Menu as="div" className="relative ml-3">
               <div>
                 <MenuButton className="relative flex rounded-full bg-gray-800 text-sm focus:outline-hidden focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-gray-800">
@@ -113,7 +151,7 @@ const NavBar = (props:any) => {
                   </a>
                 </MenuItem>
                 <MenuItem>
-                  <a
+                  <a onClick={handleLogout}
                     href="#"
                     className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
                   >
@@ -122,6 +160,7 @@ const NavBar = (props:any) => {
                 </MenuItem>
               </MenuItems>
             </Menu>
+            </>
       )}
 
         </div>
