@@ -5,6 +5,8 @@ import { toast } from 'react-toastify'
 import { Avatar, Dropdown, Navbar , Card, DropdownItem} from "flowbite-react";
 import React, { createContext, useContext } from 'react';
 import { useAuth } from "src/context/UserContext";
+import { useLogout } from "app/useLogout";
+import { useCurrency, CurrencyProvider } from "src/context/CurrencyContext"
 
 const navigation = [
   { name: 'Home', href: '/', current: true },
@@ -23,14 +25,9 @@ const NavBar = (props:any) => {
   let navigate = useNavigate();
   //const { isLoggedIn, setIsLoggedIn, name, setName, email, setEmail } = props;
   const { isLoggedIn, name , setIsLoggedIn, setName, email, setEmail} = useAuth();
-
-  const handleLogout = () => {
-    setIsLoggedIn(false);
-    setName(null);
-    setEmail(null);
-    navigate("/");
-    toast.success("You are successfully logged out!");
-  };
+  const { currency } = useCurrency();
+  const handleLogout = useLogout();
+  
 
   return (
     <Disclosure as="nav" className="bg-violet-500">
@@ -135,27 +132,27 @@ const NavBar = (props:any) => {
                 className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black/5 transition focus:outline-hidden data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
               >
                 <MenuItem>
-                  <a
-                    href="#"
+                  <Link
+                    to="/profile"
                     className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
                   >
                     Your Profile
-                  </a>
+                  </Link>
                 </MenuItem>
                 <MenuItem>
-                  <a
-                    href="#"
+                  <Link to
+                    ="/profile/account"
                     className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
                   >
                     Settings
-                  </a>
+                  </Link>
                 </MenuItem>
                 <MenuItem>
                   <a onClick={handleLogout}
                     href="#"
                     className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
                   >
-                    Sign out
+                    Log Out
                   </a>
                 </MenuItem>
               </MenuItems>

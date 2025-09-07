@@ -74,6 +74,7 @@ const Login = (props: any) => {
             setIsLoggedIn(true);
             setEmail(email);
             //navigate("/profile");
+            navigate("/");
             console.log("User is successfully logged in");
         } else {
             console.log("User is not logged in");
