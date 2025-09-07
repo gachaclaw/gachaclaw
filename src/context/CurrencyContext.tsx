@@ -7,25 +7,35 @@ declare global {
     UpdateCurrencyFromUnity?: (value: string) => void;
     GetCurrency?: () => number;
     TrySpendCurrency?: (amount: number) => boolean;
+    UpdatePrizesFromUnity?: (value: string) => void;
   }
 }
 
 interface CurrencyContextType {
   currency: number;
   setCurrency: (value: number) => void;
+  prizesWon: number;
+  setPrizesWon: (value: number) => void;
 }
 
 export const CurrencyContext = createContext<CurrencyContextType>({
   currency: 0,
   setCurrency: () => {},
+  prizesWon: 0,
+  setPrizesWon: () => {},
 });
 
 export const CurrencyProvider = ({ children }: { children: ReactNode }) => {
   const [currency, setCurrency] = useState(20);
+  const [prizesWon, setPrizesWon] = useState(0);
 
   useEffect(() => {
     window.UpdateCurrencyFromUnity = (value: string) => {
       setCurrency(parseInt(value));
+    };
+
+    window.UpdatePrizesFromUnity = (value: string) => {
+      setPrizesWon(parseInt(value));
     };
 
     window.GetCurrency = () => currency;
@@ -40,7 +50,7 @@ export const CurrencyProvider = ({ children }: { children: ReactNode }) => {
   }, [currency]);
 
   return (
-    <CurrencyContext.Provider value={{ currency, setCurrency }}>
+    <CurrencyContext.Provider value={{ currency, setCurrency, prizesWon, setPrizesWon }}>
       {children}
     </CurrencyContext.Provider>
   );

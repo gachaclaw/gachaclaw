@@ -2,12 +2,12 @@ import PongGameWebGLBuild from "src/webgl";
 import { useCurrency } from "src/context/CurrencyContext";
 
 export default function PongGame() {
-  const { currency } = useCurrency();  
+  const { currency, prizesWon } = useCurrency(); 
 
   return (
     <>
       <h1>
-        PongGame (${currency})  
+        PongGame (${currency}) - Prizes Won: {prizesWon}   
       </h1>
       <div className="w-full h-full flex items-center justify-center">
         <PongGameWebGLBuild />

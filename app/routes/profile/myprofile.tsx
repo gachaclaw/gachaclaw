@@ -4,7 +4,7 @@ export default function MyProfile(){
     return (
     <>
       <div className="space-y-12">
-        <div>STATS</div>
+        <div>Profile</div>
         <p>Credits Owned: {currency}</p>
       </div>
     </>
