@@ -106,7 +106,9 @@ const NavBar = (props:any) => {
       {/* Profile dropdown if user is logged in*/}
         <div className="flex md:order-2">
       {isLoggedIn && (
-        <>
+        <div className="flex items-center space-x-4">
+    {/* Currency value */}
+    <span className="text-yellow-400 font-semibold">Credits: {currency}</span>
             <button
               type="button"
               className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden"
@@ -157,7 +159,7 @@ const NavBar = (props:any) => {
                 </MenuItem>
               </MenuItems>
             </Menu>
-            </>
+            </div>
       )}
 
         </div>
