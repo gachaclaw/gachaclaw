@@ -179,3 +179,20 @@ class LoginView(APIView):
                 {"success": True, "message": "You are now logged in!"},
                 status=status.HTTP_200_OK,
             )
+class GetCreditsView(APIView):
+    def get(self, request):
+        email = request.query_params.get("email")
+        try:
+            user = Post.objects.get(email=email)
+            return Response({"credits": user.credits})
+        except Post.DoesNotExist:
+            return Response({"error": "User not found"}, status=404)
+    def patch(self, request):
+        email = request.data.get("email")
+        try:
+            user = Post.objects.get(email=email)
+            user.credits = request.data.get("credits", user.credits)
+            user.save()
+            return Response({"credits": user.credits})
+        except Post.DoesNotExist:
+            return Response({"error": "User not found"}, status=404)

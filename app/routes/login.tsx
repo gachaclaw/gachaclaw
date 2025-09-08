@@ -71,6 +71,7 @@ const Login = (props: any) => {
         console.log(data);
         if (data.success === true) {
             toast.success(data.message);
+            localStorage.setItem("email", email);
             setIsLoggedIn(true);
             setEmail(email);
             //navigate("/profile");

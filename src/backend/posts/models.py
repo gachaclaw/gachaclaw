@@ -10,7 +10,7 @@ class Post(models.Model):
     money = models.DecimalField(decimal_places=2, max_digits=20)
     phone = models.CharField(max_length=20, blank=True, null=True)
     country = models.CharField(max_length=100, blank=True, null=True)
-    credits = models.DecimalField(decimal_places=0, max_digits=20, default=0)
+    credits = models.DecimalField(decimal_places=0, max_digits=20, default=50)
     
     def __str__(self) -> str:
         return f"Post: {self.username}"
