@@ -76,6 +76,7 @@ const Login = (props: any) => {
         if (data.success === true) {
             toast.success(data.message);
             localStorage.setItem("email", email);
+            localStorage.setItem("username", data.username);
             setIsLoggedIn(true);
             setEmail(email);
 

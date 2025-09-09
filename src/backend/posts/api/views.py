@@ -176,7 +176,9 @@ class LoginView(APIView):
             )
         else:
             return Response(
-                {"success": True, "message": "You are now logged in!"},
+                {"success": True,
+                 "message": "You are now logged in!",
+                 "username": user.username},
                 status=status.HTTP_200_OK,
             )
 class GetCreditsView(APIView):
