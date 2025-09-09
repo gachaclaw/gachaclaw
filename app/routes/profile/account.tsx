@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-
+import { fetchCurrency } from "src/context/fetchCurrency";
 const API_URL = import.meta.env.VITE_API_URL;
 
 export default function Account() {
@@ -19,22 +19,13 @@ export default function Account() {
       return;
     }
 
-    console.log("Requesting credits for email:", storedEmail);
-
     const fetchCredits = async () => {
       try {
-        const res = await axios.get(`${API_URL}/api/credits/`, {
-          params: { email: storedEmail },
-        });
-        console.log("Credits response data:", res.data);
-
-        if (res.data.credits !== undefined) {
-          setCredits(res.data.credits);
-        } else {
-          setError("No credits data returned");
-        }
+        const credits = await fetchCurrency(storedEmail);
+        setCredits(credits);
+        console.log("Fetched credits from backend:", credits);
       } catch (err: any) {
-        console.error("Axios error fetching credits:", err);
+        console.error("Error fetching credits:", err);
         setError(err.response ? err.response.data : err.message);
       } finally {
         setLoading(false);

@@ -13,4 +13,5 @@ urlpatterns = [
     path("forgotPassword", ForgotPasswordView.as_view(), name="forgotPassword"),
     path("resetPassword", ResetPasswordView.as_view(), name="resetPassword"),
     path("credits/", GetCreditsView.as_view(), name="get_credits"),
+    path("credits/update/", GetCreditsView.as_view(), name="update_credits"),
 ]

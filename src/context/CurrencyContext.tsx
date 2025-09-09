@@ -1,8 +1,8 @@
 import React, { createContext, useState, useEffect } from "react";
 import type { ReactNode } from "react";
 import { useContext } from "react";
-import axios from "axios";
-
+import { fetchCurrency } from "src/context/fetchCurrency";
+import { updateCurrency } from "src/context/updateCurrency";
 const API_URL = import.meta.env.VITE_API_URL;
 
 declare global {
@@ -34,19 +34,20 @@ export const CurrencyProvider = ({ children }: { children: ReactNode }) => {
   const [prizesWon, setPrizesWon] = useState(0);
 
   useEffect(() => {
-  const fetchCredits = async () => {
-    const email = localStorage.getItem("email");
-    if (!email) return;
+    const fetchInitialCredits = async () => {
+      const email = localStorage.getItem("email");
+      if (!email) return;
 
-    try {
-      const res = await axios.get(`${API_URL}/api/credits/`, { params: { email } });
-      setCurrency(res.data.credits);
-    } catch (err) {
-      console.error("Fetch credits failed", err);
-    }
-  };
-  fetchCredits();
-}, []);
+      try {
+        const credits = await fetchCurrency(email);
+        setCurrency(credits);
+      } catch (err) {
+        console.error("Failed to fetch initial credits:", err);
+      }
+    };
+
+    fetchInitialCredits();
+  }, []);
   useEffect(() => {
     window.UpdateCurrencyFromUnity = (value: string) => {
       setCurrency(parseInt(value));
@@ -64,12 +65,9 @@ export const CurrencyProvider = ({ children }: { children: ReactNode }) => {
     const email = localStorage.getItem("email");
 
     if (email) {
-      axios.patch(`${API_URL}/api/credits/update/`, {
-        email,
-        credits: newVal,
-      }).catch(err => {
-        console.error("Error updating backend credits after spend:", err);
-      });
+      updateCurrency(email, newVal).catch(err => {
+  console.error("Error updating backend credits after spend:", err);
+});
     }
 
     setCurrency(newVal);
@@ -90,17 +88,12 @@ const handleAddCredits = async () => {
   console.log(`Sending PATCH request to update credits to ${newVal} for ${email}`);
 
   try {
-    const response = await axios.patch(`${API_URL}/api/credits/update/`, {
-      email,
-      credits: newVal,
-    });
-
-    console.log("PATCH response:", response.data);
-    setCurrency(newVal); // Optional: sync local state with updated value
-  } catch (err) {
-    console.error("Error updating credits:", err);
-  }
-};
+      await updateCurrency(email, newVal);
+      setCurrency(newVal);
+    } catch (err) {
+      console.error("Error updating credits:", err);
+    }
+  };
 
   return (
     <CurrencyContext.Provider value={{ currency, setCurrency, prizesWon, setPrizesWon, addCredits: handleAddCredits }}>

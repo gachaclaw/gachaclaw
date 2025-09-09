@@ -5,6 +5,9 @@ import type { Route } from './+types/login';
 import { toast } from 'react-toastify';
 //import LoginDetails from "src/backend/access_database";
 import { useAuth } from "src/context/UserContext";
+import { useCurrency, CurrencyProvider } from "src/context/CurrencyContext"
+import { fetchCurrency } from "src/context/fetchCurrency";
+
 
 interface userType{
     userName: string;
@@ -53,6 +56,7 @@ const Login = (props: any) => {
         if (isLoggedIn) navigate("profile");
     });
     */
+    const { setCurrency } = useCurrency();
 
     const handleLogin = async (ev: any) => {
         console.log("submit button clicked");
@@ -74,6 +78,11 @@ const Login = (props: any) => {
             localStorage.setItem("email", email);
             setIsLoggedIn(true);
             setEmail(email);
+
+            // Fetch credits
+            const credits = await fetchCurrency(email);
+            setCurrency(credits);
+
             //navigate("/profile");
             navigate("/");
             console.log("User is successfully logged in");
