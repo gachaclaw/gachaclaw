@@ -57,6 +57,7 @@ const Login = (props: any) => {
     });
     */
     const { setCurrency } = useCurrency();
+    const { setProfilePictureUrl } = useAuth();
     useEffect(() => {
       localStorage.removeItem("authToken");
       localStorage.removeItem("email");
@@ -88,7 +89,10 @@ const Login = (props: any) => {
             localStorage.setItem("email", email);
             localStorage.setItem("username", data.username);
             localStorage.setItem("authToken", data.token);
-
+            if(data.avatar_url) {
+    localStorage.setItem("profilePictureUrl", data.avatar_url);
+    setProfilePictureUrl(data.avatar_url);
+  }
             //update context
             setIsLoggedIn(true);
             setEmail(email);

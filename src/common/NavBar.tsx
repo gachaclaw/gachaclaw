@@ -27,7 +27,7 @@ const NavBar = (props:any) => {
   const { isLoggedIn, name , setIsLoggedIn, setName, email, setEmail} = useAuth();
   const { currency } = useCurrency();
   const handleLogout = useLogout();
-  
+  const { profilePictureUrl } = useAuth();
 
   return (
     <Disclosure as="nav" className="bg-violet-500">
@@ -162,9 +162,13 @@ const NavBar = (props:any) => {
                         <span className="absolute -inset-1.5" />
                         <span className="sr-only">Open user menu</span>
                         <img
-                          alt=""
-                          src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                          className="size-8 rounded-full"
+                          alt="Profile"
+                          src={
+                            profilePictureUrl
+                              ? `http://127.0.0.1:8000${profilePictureUrl}`
+                              : "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?..." // default
+                          }
+                          className="size-12 rounded-full object-cover" 
                         />
                       </MenuButton>
                     </div>

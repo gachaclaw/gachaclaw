@@ -5,12 +5,20 @@ import { useAuth } from "src/context/UserContext";
 
 export function useLogout() {
   const navigate = useNavigate();
-  const { setIsLoggedIn, setName, setEmail } = useAuth();
+  const { setIsLoggedIn, setName, setEmail, setProfilePictureUrl } = useAuth();
 
   const handleLogout = () => {
     setIsLoggedIn(false);
-    setName(null);
-    setEmail(null);
+    setName("");
+    setEmail("");
+    setProfilePictureUrl(null);
+
+    // Clear localStorage
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("email");
+    localStorage.removeItem("username");
+    localStorage.removeItem("profilePictureUrl");
+
     navigate("/");
     toast.success("You are successfully logged out!");
   };

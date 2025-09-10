@@ -15,6 +15,8 @@ from datetime import datetime, timedelta
 import hashlib
 import uuid
 from django.utils import timezone
+from rest_framework.permissions import AllowAny
+from rest_framework.parsers import MultiPartParser, FormParser
 
 SALT = "8b4f6b2cc1868d75ef79e5cfb8779c11b6a374bf0fce05b485581bf4e1e25b96c8c2855015de8449"
 URL = "127.0.0.1:8000"
@@ -175,10 +177,14 @@ class LoginView(APIView):
                 status=status.HTTP_200_OK,
             )
         else:
+            serializer = PostSerializer(user)
             return Response(
-                {"success": True,
-                 "message": "You are now logged in!",
-                 "username": user.username},
+                {
+                    "success": True,
+                    "message": "You are now logged in!",
+                    "username": user.username,
+                    "avatar_url": serializer.data.get('avatar', None),
+                },
                 status=status.HTTP_200_OK,
             )
 class GetCreditsView(APIView):
@@ -198,3 +204,30 @@ class GetCreditsView(APIView):
             return Response({"credits": user.credits})
         except Post.DoesNotExist:
             return Response({"error": "User not found"}, status=404)
+class UploadAvatarView(APIView):
+    parser_classes = [MultiPartParser, FormParser]
+    permission_classes = [AllowAny]  
+
+    def post(self, request, format=None):
+        email = request.data.get("email")
+        avatar = request.FILES.get("avatar")
+
+        if not email or not avatar:
+            return Response(
+                {"success": False, "message": "Missing email or avatar file."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+            user = Post.objects.get(email=email)
+            user.avatar = avatar
+            user.save()
+            return Response(
+                {"success": True, "avatar_url": user.avatar.url},
+                status=status.HTTP_200_OK
+            )
+        except Post.DoesNotExist:
+            return Response(
+                {"success": False, "message": "User not found."},
+                status=status.HTTP_404_NOT_FOUND
+            )
