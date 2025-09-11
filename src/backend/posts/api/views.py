@@ -15,6 +15,8 @@ from datetime import datetime, timedelta
 import hashlib
 import uuid
 from django.utils import timezone
+from rest_framework.permissions import AllowAny
+from rest_framework.parsers import MultiPartParser, FormParser
 
 SALT = "8b4f6b2cc1868d75ef79e5cfb8779c11b6a374bf0fce05b485581bf4e1e25b96c8c2855015de8449"
 URL = "127.0.0.1:8000"
@@ -175,7 +177,169 @@ class LoginView(APIView):
                 status=status.HTTP_200_OK,
             )
         else:
+            serializer = PostSerializer(user)
             return Response(
-                {"success": True, "message": "You are now logged in!"},
+                {
+                    "success": True,
+                    "message": "You are now logged in!",
+                    "username": user.username,
+                    "avatar_url": serializer.data.get('avatar', None),
+                    "prizes_won": serializer.data.get("prizes_won", 0),
+                },
                 status=status.HTTP_200_OK,
             )
+class UploadAvatarView(APIView):
+    parser_classes = [MultiPartParser, FormParser]
+    permission_classes = [AllowAny]  
+
+    def post(self, request, format=None):
+        email = request.data.get("email")
+        avatar = request.FILES.get("avatar")
+
+        if not email or not avatar:
+            return Response(
+                {"success": False, "message": "Missing email or avatar file."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+            user = Post.objects.get(email=email)
+            user.avatar = avatar
+            user.save()
+            return Response(
+                {"success": True, "avatar_url": user.avatar.url},
+                status=status.HTTP_200_OK
+            )
+        except Post.DoesNotExist:
+            return Response(
+                {"success": False, "message": "User not found."},
+                status=status.HTTP_404_NOT_FOUND
+            )    
+class UpdateUserStatsView(APIView):
+    def get(self, request, format=None):
+        email = request.query_params.get("email")
+        if not email:
+            return Response({"error": "Email is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            user = Post.objects.get(email=email)
+            return Response({
+                "credits": user.credits,
+                "prizes_won": user.prizes_won,
+                "games_played": user.games_played,
+                "credits_spent": user.credits_spent,
+                "email_confirmations_enabled": user.email_confirmations_enabled,
+                "promotional_offers_enabled": user.promotional_offers_enabled,
+                "theme": user.theme,
+                "language": user.language,
+                "timezone": user.timezone,
+                "time_format": user.time_format,
+                "show_animations": user.show_animations,
+                "show_tips": user.show_tips,
+                "confirm_spend": user.confirm_spend,
+                "autoplay": user.autoplay,
+                "game_resolution": user.game_resolution,
+                "game_theme": user.game_theme,
+                "game_speed": user.game_speed,
+                "music_volume": user.music_volume,
+                "sfx_volume": user.sfx_volume,
+            })
+        except Post.DoesNotExist:
+            return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+
+    def patch(self, request, format=None):
+        email = request.data.get("email")
+
+        if not email:
+            return Response({"error": "Email is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            user = Post.objects.get(email=email)
+
+            # ✅ Update fields if present
+            if 'credits' in request.data:
+                user.credits = request.data['credits']
+            if 'prizes_won' in request.data:
+                user.prizes_won = request.data['prizes_won']
+            if 'games_played' in request.data:
+                user.games_played = request.data['games_played']
+            if 'credits_spent' in request.data:
+                user.credits_spent = request.data['credits_spent']
+            if 'email_confirmations_enabled' in request.data:
+                user.email_confirmations_enabled = request.data['email_confirmations_enabled']
+            if 'promotional_offers_enabled' in request.data:
+                user.promotional_offers_enabled = request.data['promotional_offers_enabled']
+            if 'theme' in request.data:
+                user.theme = request.data['theme']
+            if 'language' in request.data:
+                user.language = request.data['language']
+            if 'timezone' in request.data:
+                user.timezone = request.data['timezone']
+            if 'time_format' in request.data:
+                user.time_format = request.data['time_format']
+            if 'show_animations' in request.data:
+                user.show_animations = request.data['show_animations']
+            if 'show_tips' in request.data:
+                user.show_tips = request.data['show_tips']
+            if 'confirm_spend' in request.data:
+                user.confirm_spend = request.data['confirm_spend']
+            if 'autoplay' in request.data:
+                user.autoplay = request.data['autoplay']
+            if 'game_resolution' in request.data:
+                user.game_resolution = request.data['game_resolution']
+            if 'game_theme' in request.data:
+                user.game_theme = request.data['game_theme']
+            if 'game_speed' in request.data:
+                user.game_speed = request.data['game_speed']
+            if 'music_volume' in request.data:
+                user.music_volume = request.data['music_volume']
+            if 'sfx_volume' in request.data:
+                user.sfx_volume = request.data['sfx_volume']
+
+            user.save()
+
+            return Response({
+                "success": True,
+                "credits": user.credits,
+                "prizes_won": user.prizes_won,
+                "games_played": user.games_played,
+                "credits_spent": user.credits_spent,
+                "email_confirmations_enabled": user.email_confirmations_enabled,
+                "promotional_offers_enabled": user.promotional_offers_enabled,
+                "theme": user.theme,
+                "language": user.language,
+                "timezone": user.timezone,
+                "time_format": user.time_format,
+                "show_animations": user.show_animations,
+                "show_tips": user.show_tips,
+                "confirm_spend": user.confirm_spend,
+                "autoplay": user.autoplay,
+                "game_resolution": user.game_resolution,
+                "game_theme": user.game_theme,
+                "game_speed": user.game_speed,
+                "music_volume": user.music_volume,
+                "sfx_volume": user.sfx_volume,
+            }, status=status.HTTP_200_OK)
+
+        except Post.DoesNotExist:
+            return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+
+
+class DeleteAccountView(APIView):
+    def delete(self, request, format=None):
+        email = request.data.get("email")
+        
+        if not email:
+            return Response({"error": "Email is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            user = Post.objects.get(email=email)
+            user.delete()
+            
+            return Response({
+                "success": True,
+                "message": "Account successfully deleted."
+            }, status=status.HTTP_200_OK)
+            
+        except Post.DoesNotExist:
+            return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
