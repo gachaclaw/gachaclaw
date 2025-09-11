@@ -6,7 +6,8 @@ import { toast } from 'react-toastify';
 //import LoginDetails from "src/backend/access_database";
 import { useAuth } from "src/context/UserContext";
 import { useCurrency, CurrencyProvider } from "src/context/CurrencyContext"
-import { fetchCurrency } from "src/context/fetchCurrency";
+import { fetchUserStats } from "src/context/fetchUserStats";
+import { clearUserStorage, setUserStorage } from "src/context/storage";
 
 
 interface userType{
@@ -14,6 +15,7 @@ interface userType{
     password: string;
     email: string;
     money: 0.00;
+    prizes_won: number;
 };
 
 export const meta: MetaFunction = () => {
@@ -56,60 +58,74 @@ const Login = (props: any) => {
         if (isLoggedIn) navigate("profile");
     });
     */
-    const { setCurrency } = useCurrency();
+    const { setCurrency, setPrizesWon, resetContext, setGamesPlayed, setCreditsSpent } = useCurrency();
     const { setProfilePictureUrl } = useAuth();
+    
     useEffect(() => {
-      localStorage.removeItem("authToken");
-      localStorage.removeItem("email");
-      localStorage.removeItem("username");
-
+      clearUserStorage();
       setIsLoggedIn(false);
       setEmail("");
       setName("");
+      resetContext?.(); // Reset currency context when entering login page
     }, []);
+
     const handleLogin = async (ev: any) => {
-        console.log("submit button clicked");
-        console.log(URL);
-        console.log("Raw env:", import.meta.env.VITE_API_URL);
+  ev.preventDefault();
+  const email = ev.target.email.value;
+  const password = ev.target.password.value;
+  const formData = { email, password };
 
-        ev.preventDefault(); // refreshes page
-        const email = ev.target.email.value;
-        const password = ev.target.password.value;
-        const formData = { email: email, password: password };
+  try {
+    const res = await axios.post(URL, formData);
+    const data = res.data;
 
-        console.log(`${email} \n ${password}`);
-        const res = await axios.post(URL, formData);
-        const data = res.data;
-        console.log("TESTING");
-        console.log(data);
-        if (data.success === true) {
-            toast.success(data.message);
+    if (data.success === true) {
+      toast.success(data.message);
 
-            //store data
-            localStorage.setItem("email", email);
-            localStorage.setItem("username", data.username);
-            localStorage.setItem("authToken", data.token);
-            if(data.avatar_url) {
-    localStorage.setItem("profilePictureUrl", data.avatar_url);
-    setProfilePictureUrl(data.avatar_url);
+      // Fetch user stats
+      const {
+        credits,
+        prizes_won,
+        games_played,
+        credits_spent,
+      } = await fetchUserStats(email);
+
+      // Store stats in localStorage
+      setUserStorage({
+        email,
+        username: data.username,
+        authToken: data.token,
+        profilePictureUrl: data.avatar_url,
+        prizes_won,
+        credits,
+        games_played,
+        credits_spent,
+      });
+
+      if (data.avatar_url) {
+        localStorage.setItem("profilePictureUrl", data.avatar_url);
+        setProfilePictureUrl(data.avatar_url);
+      }
+
+      // Update context with all stats
+      setIsLoggedIn(true);
+      setEmail(email);
+      setCurrency(credits);
+      setPrizesWon(prizes_won);
+      setGamesPlayed(games_played);
+      setCreditsSpent(credits_spent);
+
+      // Redirect
+      navigate("/");
+      console.log("User is successfully logged in");
+    } else {
+      toast.error("Unable to get data: " + data.message);
+    }
+  } catch (error) {
+    console.error("Login failed:", error);
+    toast.error("Login request failed.");
   }
-            //update context
-            setIsLoggedIn(true);
-            setEmail(email);
-
-            //fetch credits
-            const credits = await fetchCurrency(email);
-            setCurrency(credits);
-
-            //redirect
-            navigate("/");
-            console.log("User is successfully logged in");
-        } else {
-            console.log("User is not logged in");
-            toast.error("Unable to get data" + data.message);
-        }
-
-  };
+};
 
     return (
       <>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { fetchCurrency } from "src/context/fetchCurrency";
+import { fetchUserStats } from "src/context/fetchUserStats";
 const API_URL = import.meta.env.VITE_API_URL;
 
 export default function Account() {
@@ -34,7 +34,7 @@ export default function Account() {
 
     const fetchCredits = async () => {
       try {
-        const credits = await fetchCurrency(storedEmail);
+        const {credits} = await fetchUserStats(storedEmail);
         setCredits(credits);
         console.log("Fetched credits from backend:", credits);
       } catch (err: any) {

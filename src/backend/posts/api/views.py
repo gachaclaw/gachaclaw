@@ -184,26 +184,10 @@ class LoginView(APIView):
                     "message": "You are now logged in!",
                     "username": user.username,
                     "avatar_url": serializer.data.get('avatar', None),
+                    "prizes_won": serializer.data.get("prizes_won", 0),
                 },
                 status=status.HTTP_200_OK,
             )
-class GetCreditsView(APIView):
-    def get(self, request):
-        email = request.query_params.get("email")
-        try:
-            user = Post.objects.get(email=email)
-            return Response({"credits": user.credits})
-        except Post.DoesNotExist:
-            return Response({"error": "User not found"}, status=404)
-    def patch(self, request):
-        email = request.data.get("email")
-        try:
-            user = Post.objects.get(email=email)
-            user.credits = request.data.get("credits", user.credits)
-            user.save()
-            return Response({"credits": user.credits})
-        except Post.DoesNotExist:
-            return Response({"error": "User not found"}, status=404)
 class UploadAvatarView(APIView):
     parser_classes = [MultiPartParser, FormParser]
     permission_classes = [AllowAny]  
@@ -230,4 +214,52 @@ class UploadAvatarView(APIView):
             return Response(
                 {"success": False, "message": "User not found."},
                 status=status.HTTP_404_NOT_FOUND
-            )
+            )    
+class UpdateUserStatsView(APIView):
+    def get(self, request, format=None):
+        email = request.query_params.get("email")
+        if not email:
+            return Response({"error": "Email is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            user = Post.objects.get(email=email)
+            return Response({
+                "credits": user.credits,
+                "prizes_won": user.prizes_won,
+                "games_played": user.games_played,
+                "credits_spent": user.credits_spent,
+            })
+        except Post.DoesNotExist:
+            return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+
+    def patch(self, request, format=None):
+        email = request.data.get("email")
+
+        if not email:
+            return Response({"error": "Email is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            user = Post.objects.get(email=email)
+
+            # ✅ Update fields if present
+            if 'credits' in request.data:
+                user.credits = request.data['credits']
+            if 'prizes_won' in request.data:
+                user.prizes_won = request.data['prizes_won']
+            if 'games_played' in request.data:
+                user.games_played = request.data['games_played']
+            if 'credits_spent' in request.data:
+                user.credits_spent = request.data['credits_spent']
+
+            user.save()
+
+            return Response({
+                "success": True,
+                "credits": user.credits,
+                "prizes_won": user.prizes_won,
+                "games_played": user.games_played,
+                "credits_spent": user.credits_spent,
+            }, status=status.HTTP_200_OK)
+
+        except Post.DoesNotExist:
+            return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)

@@ -12,6 +12,9 @@ class Post(models.Model):
     country = models.CharField(max_length=100, blank=True, null=True)
     credits = models.DecimalField(decimal_places=0, max_digits=20, default=50)
     avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
+    prizes_won = models.IntegerField(default=0)
+    games_played = models.IntegerField(default=0)
+    credits_spent = models.IntegerField(default=0)
     def __str__(self) -> str:
         return f"Post: {self.username}"
     
