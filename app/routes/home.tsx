@@ -43,15 +43,12 @@ export default function Home( ) {
         <div className = "p-6 text-center">
           <h1 className="font-bold p-6 opacity-90"> About us</h1>
           <p className = "text-sm p-6 opacity-90">
-            Murtaza muslim  Murtaza muslim  Murtaza muslim  
-            Murtaza muslim  Murtaza muslim  Murtaza muslim  
-            Murtaza muslim  Murtaza muslim  Murtaza muslim  
-            Murtaza muslim  Murtaza muslim  Murtaza muslim  
-            Murtaza muslim  Murtaza muslim  Murtaza muslim  
-            Murtaza muslim  Murtaza muslim  Murtaza muslim 
-            Murtaza muslim Murtaza muslim Murtaza muslim
-             Murtaza muslim Murtaza muslim Murtaza muslim 
-             Murtaza muslim Murtaza muslim Murtaza muslim 
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+             incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+              nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+               Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
+                fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa
+                 qui officia deserunt mollit anim id est laborum.
              </p>
         </div>
       </section>
@@ -62,15 +59,13 @@ export default function Home( ) {
         <div className = "p-6 text-center">
           <h1 className="font-bold p-6 opacity-90"> Contact us</h1>
           <p className = "text-sm p-6 opacity-90"> 
-            Murtaza muslim  Murtaza muslim  Murtaza muslim  
-            Murtaza muslim  Murtaza muslim  Murtaza muslim  
-            Murtaza muslim  Murtaza muslim  Murtaza muslim  
-            Murtaza muslim  Murtaza muslim  Murtaza muslim  
-            Murtaza muslim  Murtaza muslim  Murtaza muslim  
-            Murtaza muslim  Murtaza muslim  Murtaza muslim 
-            Murtaza muslim Murtaza muslim Murtaza muslim
-             Murtaza muslim Murtaza muslim Murtaza muslim 
-             Murtaza muslim Murtaza muslim Murtaza muslim 
+            Lorem ipsum dolor sit amet consectetur adipiscing elit.
+             Quisque faucibus ex sapien vitae pellentesque sem placerat.
+              In id cursus mi pretium tellus duis convallis. Tempus leo eu
+               aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus
+                nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia
+                 integer nunc posuere. Ut hendrerit semper vel class aptent taciti
+                  sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos. 
              </p>
         </div>
       </section>
