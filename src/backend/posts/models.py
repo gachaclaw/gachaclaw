@@ -15,6 +15,8 @@ class Post(models.Model):
     prizes_won = models.IntegerField(default=0)
     games_played = models.IntegerField(default=0)
     credits_spent = models.IntegerField(default=0)
+    email_confirmations_enabled = models.BooleanField(default=True)
+    promotional_offers_enabled = models.BooleanField(default=True)
     def __str__(self) -> str:
         return f"Post: {self.username}"
     

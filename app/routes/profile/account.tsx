@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { fetchUserStats } from "src/context/fetchUserStats";
+import { updateUserStats } from "src/context/updateUserStats";
 const API_URL = import.meta.env.VITE_API_URL;
 
 export default function Account() {
@@ -13,13 +14,48 @@ export default function Account() {
   const [emailConfirmationsEnabled, setEC_Enabled] = useState<boolean>(true);
   const [promotionalOffersEnabled, setPO_Enabled] = useState<boolean>(true);
 
-  const toggleEC = () => {
-    setEC_Enabled((prev) => !prev);
+  const toggleEC = async () => {
+    const newValue = !emailConfirmationsEnabled;
+    setEC_Enabled(newValue);
+    
+    const storedEmail = localStorage.getItem("email");
+    if (storedEmail) {
+      try {
+        await updateUserStats({ 
+          email: storedEmail, 
+          email_confirmations_enabled: newValue 
+        });
+        console.log("Email confirmations updated:", newValue);
+      } catch (err) {
+        console.error("Error updating email confirmations:", err);
+        // Revert on error
+        setEC_Enabled(!newValue);
+      }
+    }
   };
 
-  const togglePO = () => {
-    setPO_Enabled((prev) => !prev);
+  const togglePO = async () => {
+    const newValue = !promotionalOffersEnabled;
+    setPO_Enabled(newValue);
+    
+    const storedEmail = localStorage.getItem("email");
+    if (storedEmail) {
+      try {
+        await updateUserStats({ 
+          email: storedEmail, 
+          promotional_offers_enabled: newValue 
+        });
+        console.log("Promotional offers updated:", newValue);
+      } catch (err) {
+        console.error("Error updating promotional offers:", err);
+        // Revert on error
+        setPO_Enabled(!newValue);
+      }
+    }
   };
+
+
+
   useEffect(() => {
     const storedEmail = localStorage.getItem("email");
     setEmail(storedEmail);
@@ -32,20 +68,22 @@ export default function Account() {
       return;
     }
 
-    const fetchCredits = async () => {
+    const fetchUserData = async () => {
       try {
-        const {credits} = await fetchUserStats(storedEmail);
-        setCredits(credits);
-        console.log("Fetched credits from backend:", credits);
+        const data = await fetchUserStats(storedEmail);
+        setCredits(data.credits);
+        setEC_Enabled(data.email_confirmations_enabled);
+        setPO_Enabled(data.promotional_offers_enabled);
+        console.log("Fetched user data from backend:", data);
       } catch (err: any) {
-        console.error("Error fetching credits:", err);
+        console.error("Error fetching user data:", err);
         setError(err.response ? err.response.data : err.message);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchCredits();
+    fetchUserData();
   }, []);
 
   return (
@@ -108,16 +146,6 @@ export default function Account() {
           {promotionalOffersEnabled ? "✔" : ""}
         </button>
         <span className="text-lg">Promotional Offers</span>
-      </div>
-      <hr className="my-6 border-gray-600" />
-
-      <div className="mt-8">
-        <button
-          className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-semibold rounded transition-colors"
-          onClick={() => console.log("Delete account clicked")} // Placeholder for now
-        >
-          Delete Account
-        </button>
       </div>
     </div>
   );

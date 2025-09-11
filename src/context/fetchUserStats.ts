@@ -6,6 +6,8 @@ type Stats = {
   prizes_won: number;
   games_played: number;
   credits_spent: number;
+  email_confirmations_enabled: boolean;
+  promotional_offers_enabled: boolean;
 };
 
 export const fetchUserStats = async (email: string): Promise<Stats> => {
@@ -16,6 +18,8 @@ export const fetchUserStats = async (email: string): Promise<Stats> => {
       prizes_won: 0,
       games_played: 0,
       credits_spent: 0,
+      email_confirmations_enabled: true,
+      promotional_offers_enabled: true,
     };
   }
 
@@ -32,6 +36,8 @@ export const fetchUserStats = async (email: string): Promise<Stats> => {
       prizes_won: Number(d.prizes_won ?? 0),
       games_played: Number(d.games_played ?? 0),
       credits_spent: Number(d.credits_spent ?? 0),
+      email_confirmations_enabled: Boolean(d.email_confirmations_enabled ?? true),
+      promotional_offers_enabled: Boolean(d.promotional_offers_enabled ?? true),
     };
 
     console.log("Normalized user stats:", stats);
@@ -44,6 +50,8 @@ export const fetchUserStats = async (email: string): Promise<Stats> => {
       prizes_won: 0,
       games_played: 0,
       credits_spent: 0,
+      email_confirmations_enabled: true,
+      promotional_offers_enabled: true,
     };
   }
 };

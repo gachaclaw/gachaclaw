@@ -228,6 +228,8 @@ class UpdateUserStatsView(APIView):
                 "prizes_won": user.prizes_won,
                 "games_played": user.games_played,
                 "credits_spent": user.credits_spent,
+                "email_confirmations_enabled": user.email_confirmations_enabled,
+                "promotional_offers_enabled": user.promotional_offers_enabled,
             })
         except Post.DoesNotExist:
             return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
@@ -250,6 +252,10 @@ class UpdateUserStatsView(APIView):
                 user.games_played = request.data['games_played']
             if 'credits_spent' in request.data:
                 user.credits_spent = request.data['credits_spent']
+            if 'email_confirmations_enabled' in request.data:
+                user.email_confirmations_enabled = request.data['email_confirmations_enabled']
+            if 'promotional_offers_enabled' in request.data:
+                user.promotional_offers_enabled = request.data['promotional_offers_enabled']
 
             user.save()
 
@@ -259,7 +265,29 @@ class UpdateUserStatsView(APIView):
                 "prizes_won": user.prizes_won,
                 "games_played": user.games_played,
                 "credits_spent": user.credits_spent,
+                "email_confirmations_enabled": user.email_confirmations_enabled,
+                "promotional_offers_enabled": user.promotional_offers_enabled,
             }, status=status.HTTP_200_OK)
 
+        except Post.DoesNotExist:
+            return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+
+
+class DeleteAccountView(APIView):
+    def delete(self, request, format=None):
+        email = request.data.get("email")
+        
+        if not email:
+            return Response({"error": "Email is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            user = Post.objects.get(email=email)
+            user.delete()
+            
+            return Response({
+                "success": True,
+                "message": "Account successfully deleted."
+            }, status=status.HTTP_200_OK)
+            
         except Post.DoesNotExist:
             return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)

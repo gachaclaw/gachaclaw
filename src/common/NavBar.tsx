@@ -137,7 +137,10 @@ const NavBar = (props:any) => {
                       <BellIcon aria-hidden="true" className="size-6" />
                     </MenuButton>
 
-                    <MenuItems className="absolute right-0 z-10 mt-2 w-64 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-black/5 focus:outline-hidden">
+                    <MenuItems
+                      transition
+                      className="absolute right-0 z-10 mt-2 w-64 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-black/5 transition focus:outline-hidden data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
+                    >
                       <MenuItem>
                         <div className="px-4 py-2 text-sm text-gray-700">
                           No new notifications
