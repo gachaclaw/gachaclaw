@@ -79,7 +79,6 @@ export default function Security() {
   return (
     <div className="p-4 space-y-4 text-white">
       <h2 className="text-2xl font-bold">SECURITY</h2>
-      <p>Credits: {currency}</p>
       <button
         onClick={addCredits}
         className="mt-4 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
@@ -148,7 +147,7 @@ export default function Security() {
         
         {showAdvanced && (
           <div className="mt-4 p-4 bg-gray-800 rounded-lg border border-gray-600">
-            <h4 className="text-lg font-medium text-white mb-3">Danger Zone</h4>
+            <h4 className="text-lg font-medium text-white mb-3">Beware!</h4>
             <p className="text-gray-400 text-sm mb-4">
               These actions are permanent and cannot be undone.
             </p>

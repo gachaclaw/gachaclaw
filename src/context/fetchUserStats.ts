@@ -8,6 +8,19 @@ type Stats = {
   credits_spent: number;
   email_confirmations_enabled: boolean;
   promotional_offers_enabled: boolean;
+  theme: string;
+  language: string;
+  timezone: string;
+  time_format: string;
+  show_animations: boolean;
+  show_tips: boolean;
+  confirm_spend: boolean;
+  autoplay: boolean;
+  game_resolution: string;
+  game_theme: string;
+  game_speed: string;
+  music_volume: number;
+  sfx_volume: number;
 };
 
 export const fetchUserStats = async (email: string): Promise<Stats> => {
@@ -20,6 +33,19 @@ export const fetchUserStats = async (email: string): Promise<Stats> => {
       credits_spent: 0,
       email_confirmations_enabled: true,
       promotional_offers_enabled: true,
+      theme: 'light',
+      language: 'en',
+      timezone: 'CST',
+      time_format: 'military',
+      show_animations: true,
+      show_tips: true,
+      confirm_spend: true,
+      autoplay: false,
+      game_resolution: '1920x1080',
+      game_theme: 'Classic',
+      game_speed: 'Normal',
+      music_volume: 50,
+      sfx_volume: 50,
     };
   }
 
@@ -38,6 +64,19 @@ export const fetchUserStats = async (email: string): Promise<Stats> => {
       credits_spent: Number(d.credits_spent ?? 0),
       email_confirmations_enabled: Boolean(d.email_confirmations_enabled ?? true),
       promotional_offers_enabled: Boolean(d.promotional_offers_enabled ?? true),
+      theme: String(d.theme ?? 'light'),
+      language: String(d.language ?? 'en'),
+      timezone: String(d.timezone ?? 'CST'),
+      time_format: String(d.time_format ?? 'military'),
+      show_animations: Boolean(d.show_animations ?? true),
+      show_tips: Boolean(d.show_tips ?? true),
+      confirm_spend: Boolean(d.confirm_spend ?? true),
+      autoplay: Boolean(d.autoplay ?? false),
+      game_resolution: String(d.game_resolution ?? '1920x1080'),
+      game_theme: String(d.game_theme ?? 'Classic'),
+      game_speed: String(d.game_speed ?? 'Normal'),
+      music_volume: Number(d.music_volume ?? 50),
+      sfx_volume: Number(d.sfx_volume ?? 50),
     };
 
     console.log("Normalized user stats:", stats);
@@ -52,6 +91,19 @@ export const fetchUserStats = async (email: string): Promise<Stats> => {
       credits_spent: 0,
       email_confirmations_enabled: true,
       promotional_offers_enabled: true,
+      theme: 'light',
+      language: 'en',
+      timezone: 'CST',
+      time_format: 'military',
+      show_animations: true,
+      show_tips: true,
+      confirm_spend: true,
+      autoplay: false,
+      game_resolution: '1920x1080',
+      game_theme: 'Classic',
+      game_speed: 'Normal',
+      music_volume: 50,
+      sfx_volume: 50,
     };
   }
 };

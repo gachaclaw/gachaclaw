@@ -17,6 +17,20 @@ class Post(models.Model):
     credits_spent = models.IntegerField(default=0)
     email_confirmations_enabled = models.BooleanField(default=True)
     promotional_offers_enabled = models.BooleanField(default=True)
+    theme = models.CharField(max_length=10, default='light')
+    language = models.CharField(max_length=5, default='en')
+    timezone = models.CharField(max_length=10, default='CST')
+    time_format = models.CharField(max_length=10, default='military')
+    show_animations = models.BooleanField(default=True)
+    # Gameplay settings
+    show_tips = models.BooleanField(default=True)
+    confirm_spend = models.BooleanField(default=True)
+    autoplay = models.BooleanField(default=False)
+    game_resolution = models.CharField(max_length=15, default='1920x1080')
+    game_theme = models.CharField(max_length=10, default='Classic')
+    game_speed = models.CharField(max_length=10, default='Normal')
+    music_volume = models.IntegerField(default=50)
+    sfx_volume = models.IntegerField(default=50)
     def __str__(self) -> str:
         return f"Post: {self.username}"
     

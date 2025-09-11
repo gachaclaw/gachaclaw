@@ -108,15 +108,6 @@ export default function Account() {
     Change
   </button>
 </div>
-<br></br>
-      {loading ? (
-        <p>Credits: Loading...</p>
-      ) : error ? (
-        <p>Credits: Error - {error}</p>
-      ) : (
-        <p>Credits: {credits}</p>
-      )}
-
       <hr className="my-6 border-gray-600" />
       <h3 className="text-xl font-semibold mb-2">Email Options</h3>
 

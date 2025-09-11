@@ -230,6 +230,19 @@ class UpdateUserStatsView(APIView):
                 "credits_spent": user.credits_spent,
                 "email_confirmations_enabled": user.email_confirmations_enabled,
                 "promotional_offers_enabled": user.promotional_offers_enabled,
+                "theme": user.theme,
+                "language": user.language,
+                "timezone": user.timezone,
+                "time_format": user.time_format,
+                "show_animations": user.show_animations,
+                "show_tips": user.show_tips,
+                "confirm_spend": user.confirm_spend,
+                "autoplay": user.autoplay,
+                "game_resolution": user.game_resolution,
+                "game_theme": user.game_theme,
+                "game_speed": user.game_speed,
+                "music_volume": user.music_volume,
+                "sfx_volume": user.sfx_volume,
             })
         except Post.DoesNotExist:
             return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
@@ -256,6 +269,32 @@ class UpdateUserStatsView(APIView):
                 user.email_confirmations_enabled = request.data['email_confirmations_enabled']
             if 'promotional_offers_enabled' in request.data:
                 user.promotional_offers_enabled = request.data['promotional_offers_enabled']
+            if 'theme' in request.data:
+                user.theme = request.data['theme']
+            if 'language' in request.data:
+                user.language = request.data['language']
+            if 'timezone' in request.data:
+                user.timezone = request.data['timezone']
+            if 'time_format' in request.data:
+                user.time_format = request.data['time_format']
+            if 'show_animations' in request.data:
+                user.show_animations = request.data['show_animations']
+            if 'show_tips' in request.data:
+                user.show_tips = request.data['show_tips']
+            if 'confirm_spend' in request.data:
+                user.confirm_spend = request.data['confirm_spend']
+            if 'autoplay' in request.data:
+                user.autoplay = request.data['autoplay']
+            if 'game_resolution' in request.data:
+                user.game_resolution = request.data['game_resolution']
+            if 'game_theme' in request.data:
+                user.game_theme = request.data['game_theme']
+            if 'game_speed' in request.data:
+                user.game_speed = request.data['game_speed']
+            if 'music_volume' in request.data:
+                user.music_volume = request.data['music_volume']
+            if 'sfx_volume' in request.data:
+                user.sfx_volume = request.data['sfx_volume']
 
             user.save()
 
@@ -267,6 +306,19 @@ class UpdateUserStatsView(APIView):
                 "credits_spent": user.credits_spent,
                 "email_confirmations_enabled": user.email_confirmations_enabled,
                 "promotional_offers_enabled": user.promotional_offers_enabled,
+                "theme": user.theme,
+                "language": user.language,
+                "timezone": user.timezone,
+                "time_format": user.time_format,
+                "show_animations": user.show_animations,
+                "show_tips": user.show_tips,
+                "confirm_spend": user.confirm_spend,
+                "autoplay": user.autoplay,
+                "game_resolution": user.game_resolution,
+                "game_theme": user.game_theme,
+                "game_speed": user.game_speed,
+                "music_volume": user.music_volume,
+                "sfx_volume": user.sfx_volume,
             }, status=status.HTTP_200_OK)
 
         except Post.DoesNotExist:
