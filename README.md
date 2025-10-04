@@ -10,7 +10,9 @@ A modern, production-ready template for building full-stack React applications u
 - 🔄 Data loading and mutations
 - 🔒 TypeScript by default
 - 🎉 TailwindCSS for styling
+- 🐍 Django backend (REST API)
 - 📖 [React Router docs](https://reactrouter.com/)
+
 
 ## Getting Started
 
@@ -30,7 +32,32 @@ Start the development server with HMR:
 npm run dev
 ```
 
-Your application will be available at `http://localhost:3000`.
+Your application will be available at `http://localhost:3000` or where the cmd states.
+
+# Backend Setup (Django REST API):
+
+## Navigate to the backend folder
+cd src/backend
+
+## Create and activate a virtual environment
+python -m venv .venv
+
+.venv\Scripts\activate.bat 
+
+## Create a .env file in project root directory with:
+VITE_API_URL=http://127.0.0.1:8000
+## Install Django and dependencies
+pip install django djangorestframework
+
+## Apply migrations and create admin user
+python manage.py makemigrations &nbsp
+
+python manage.py migrate &nbsp
+
+python manage.py createsuperuser
+
+## Run the backend server
+python manage.py runserver
 
 ## Building for Production
 
@@ -51,3 +78,4 @@ This template comes with [Tailwind CSS](https://tailwindcss.com/) already config
 ---
 
 Built with ❤️ using React Router.
+
