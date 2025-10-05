@@ -49,6 +49,8 @@ VITE_API_URL=http://127.0.0.1:8000
 ## Install Django and dependencies
 pip install django djangorestframework
 
+pip install django-cors-headers
+
 ## Apply migrations and create admin user
 python manage.py makemigrations &nbsp
 
@@ -78,4 +80,5 @@ This template comes with [Tailwind CSS](https://tailwindcss.com/) already config
 ---
 
 Built with ❤️ using React Router.
+
 
