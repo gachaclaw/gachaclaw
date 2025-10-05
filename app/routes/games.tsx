@@ -48,31 +48,78 @@ const gameLaunchers = [
 
 
 
-function GameButton({game, onClick}: { game: typeof gameLaunchers[0], onClick: () => void} )
+function GameButton({game, onClick, isFavorited, onToggleFavorite}: { 
+    game: typeof gameLaunchers[0], 
+    onClick: () => void,
+    isFavorited: boolean,
+    onToggleFavorite: () => void
+} )
 {
     const { currency } = useCurrency();
 
     return (
-        <div
-            onClick={onClick}
-            className={`${game.color} rounded-lg shadow-lg p-6 cursor-pointer transition-all duration-300 
-                hover:scale-105 flex flex-col items-center justify-center 
-                text-white font-bold text-xl h-40`}
-        >
-             <span>{game.name}</span>
-            <span className="text-sm mt-2">Cost: {game.cost} coins</span>
-
+        <div className="relative">
+            <div
+                onClick={onClick}
+                className={`${game.color} rounded-lg shadow-lg p-6 cursor-pointer transition-all duration-300 
+                    hover:scale-105 flex flex-col items-center justify-center 
+                    text-white font-bold text-xl h-40`}
+            >
+                 <span>{game.name}</span>
+                <span className="text-sm mt-2">Cost: {game.cost} coins</span>
+            </div>
+            <button
+                onClick={(e) => {
+                    e.stopPropagation();
+                    onToggleFavorite();
+                }}
+                className="absolute top-2 right-2 bg-white/20 hover:bg-white/30 text-white 
+                    rounded-full w-8 h-8 flex items-center justify-center
+                    transition-all duration-200"
+            >
+                {isFavorited ? '★' : '☆'}
+            </button>
         </div>
     );
 }
 
 export default function Games(){
     const [activeGame, setActiveGame] = useState<typeof gameLaunchers[0] | null>(null);
+    const [favorites, setFavorites] = useState<string[]>([]);
+    const [isLoaded, setIsLoaded] = useState(false);
     const { currency, setCurrency } = useCurrency();
+
+    // Load favorites from localStorage on component mount
+    useEffect(() => {
+        const savedFavorites = localStorage.getItem('gameFavorites');
+        if (savedFavorites) {
+            setFavorites(JSON.parse(savedFavorites));
+        }
+        setIsLoaded(true);
+    }, []);
+
+    // Save favorites to localStorage whenever favorites change (but only after initial load)
+    useEffect(() => {
+        if (isLoaded) {
+            localStorage.setItem('gameFavorites', JSON.stringify(favorites));
+        }
+    }, [favorites, isLoaded]);
 
     const handleGameClick = (game: typeof gameLaunchers[0]) => {  
       setActiveGame(game);
     };
+
+    const toggleFavorite = (gameId: string) => {
+        setFavorites(prev => 
+            prev.includes(gameId) 
+                ? prev.filter(id => id !== gameId)
+                : [...prev, gameId]
+        );
+    };
+
+    // Separate games into favorites and regular games
+    const favoriteGames = gameLaunchers.filter(game => favorites.includes(game.id));
+    const regularGames = gameLaunchers.filter(game => !favorites.includes(game.id));
 
     return (
         <div className="min-h-screen w-full p-4">
@@ -86,14 +133,43 @@ export default function Games(){
 
                 <div className="flex flex-col items-center w-full">
                     <div className="w-full max-w-4xl space-y-6">
+                        {/* Favorites Section */}
+                        {favoriteGames.length > 0 && (
+                            <div className="mb-8">
+                                <h2 className="text-2xl font-bold text-white mb-4">Favorites</h2>
+                                <div className="space-y-4">
+                                    {favoriteGames.map((game) => (
+                                        <GameButton
+                                            key={game.id}
+                                            game={game}
+                                            onClick={() => handleGameClick(game)}
+                                            isFavorited={true}
+                                            onToggleFavorite={() => toggleFavorite(game.id)}
+                                        />
+                                    ))}
+                                </div>
+                            </div>
+                        )}
 
-                        {gameLaunchers.map((game) =>(
-                            <GameButton
-                            key={game.id}
-                            game={game}
-                            onClick={() => handleGameClick(game)}
-                                />
-                        ))}
+                        {/* Regular Games Section */}
+                        {regularGames.length > 0 && (
+                            <div>
+                                {favoriteGames.length > 0 && (
+                                    <h2 className="text-2xl font-bold text-white mb-4">All Games</h2>
+                                )}
+                                <div className="space-y-4">
+                                    {regularGames.map((game) => (
+                                        <GameButton
+                                            key={game.id}
+                                            game={game}
+                                            onClick={() => handleGameClick(game)}
+                                            isFavorited={false}
+                                            onToggleFavorite={() => toggleFavorite(game.id)}
+                                        />
+                                    ))}
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
 
